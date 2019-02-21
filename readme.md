@@ -6,7 +6,7 @@ flutterw：解决多人同时开发flutter项目的时候，版本不一致的�
 
 ### 使用说明
 1. 在你的项目根目录中执行命令下载脚本   
-`curl -O https://raw.githubusercontent.com/zakiso/flutterw/master/flutterw`
+`curl -O https://raw.githubusercontent.com/zakiso/flutterw/master/flutterw && chmod 755 flutterw`
 
 2. 下载好脚本后在根目录中使用  
 `flutterw init`  
