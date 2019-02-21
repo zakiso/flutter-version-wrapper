@@ -1,0 +1,89 @@
+#!/usr/bin/env sh
+
+WRAPPER_PROPERTIES_FILE="flutter_wrapper.properties"
+WRAPPER_SDK_DIRECTORY="${HOME}/.flutter_wrapper"
+
+CURRENT_VERSION=""
+CURRENT_CHANNEL=""
+CURRENT_URL=""
+
+PARAM=""
+
+# collection current installed flutter version info
+collection_sdk_info(){
+    echo $1
+    version="$(cut -d'•' -f1 <<< $1)"
+    CURRENT_VERSION="$(cut -d' ' -f2 <<< ${version})"
+    channel="$(cut -d'•' -f2 <<< $1)"
+    CURRENT_CHANNEL="$(cut -d' ' -f2 <<< ${channel})"
+    git_url="$(cut -d'•' -f3 <<< $1)"
+    CURRENT_URL="$(cut -d' ' -f1 <<< ${git_url})"
+}
+
+# init() will create flutter_wrapper.property file
+# This file will according system flutter sdk version collection 
+# flutter version and channel and download url info
+init(){
+    #check flutter is installed
+    system_sdk_info="$(flutter --version)"
+    if [ ! $? -eq 0 ]; then
+        echo "Error: flutter is not installed."
+        exit 1
+    fi
+
+    collection_sdk_info "${system_sdk_info}"
+
+    # remove old flutter_wrapper.property file 
+    rm -rf ${WRAPPER_PROPERTIES_FILE}
+
+    # add to file
+    echo "VERSION=${CURRENT_VERSION}" >> "v${WRAPPER_PROPERTIES_FILE}"
+    echo "CHANNEL=${CURRENT_CHANNEL}" >> ${WRAPPER_PROPERTIES_FILE}
+    echo "REPO_URL=${CURRENT_URL}" >> ${WRAPPER_PROPERTIES_FILE}
+}
+
+download_sdk(){
+    echo "$@"
+    required_flutter="${WRAPPER_SDK_DIRECTORY}/${VERSION}/bin/flutter"
+    if [ ! -e ${required_flutter} ]
+    then
+        if [ "$[CHANNEL]" == "master" ]
+        then
+            git clone -b master https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" 
+        else
+            git clone -b "v${VERSION}" https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" 
+        fi
+    fi
+}
+
+
+# read flutter_wrapper.properties file
+check_file_config(){
+    if [ -f "./$WRAPPER_PROPERTIES_FILE" ]
+    then
+        while IFS='=' read -r key value
+        do
+            key=$(echo $key | tr '.' '_')
+            eval ${key}=\${value}
+        done < "$WRAPPER_PROPERTIES_FILE"
+        if [[ -z $VERSION || -z $CHANNEL || -z $REPO_URL ]]; then
+            echo "./$WRAPPER_PROPERTIES_FILE is incorrect,please check it or run 'flutterw init'."
+            exit 1
+        fi
+    else
+        echo "$WRAPPER_PROPERTIES_FILE not found. please run 'flutterw init' to init project"
+    fi
+}
+
+if [ "$1" == "init" ]; then
+    init
+    printf "Init successful"
+else
+     # check properites file exists
+    check_file_config
+    download_sdk
+fi
+
+# run command
+set -e
+"${WRAPPER_SDK_DIRECTORY}/${VERSION}/bin/flutter" "$@"
