@@ -37,21 +37,20 @@ init(){
     rm -rf ${WRAPPER_PROPERTIES_FILE}
 
     # add to file
-    echo "VERSION=${CURRENT_VERSION}" >> "v${WRAPPER_PROPERTIES_FILE}"
+    echo "VERSION=${CURRENT_VERSION}" >> ${WRAPPER_PROPERTIES_FILE}
     echo "CHANNEL=${CURRENT_CHANNEL}" >> ${WRAPPER_PROPERTIES_FILE}
     echo "REPO_URL=${CURRENT_URL}" >> ${WRAPPER_PROPERTIES_FILE}
 }
 
 download_sdk(){
-    echo "$@"
     required_flutter="${WRAPPER_SDK_DIRECTORY}/${VERSION}/bin/flutter"
     if [ ! -e ${required_flutter} ]
     then
-        if [ "$[CHANNEL]" == "master" ]
+        if [[ ${VERSION} =~ ^[0-9|\.]+$ ]]
         then
-            git clone -b master https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" 
-        else
             git clone -b "v${VERSION}" https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" 
+        else
+            git clone -b master https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" 
         fi
     fi
 }
