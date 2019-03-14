@@ -48,6 +48,7 @@ download_sdk(){
     then
         if [[ ${VERSION} =~ ^[0-9|\.]+$ ]]
         then
+            echo "v${VERSION}"
             git clone -b "v${VERSION}" https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" 
         else
             git clone -b master https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" 
@@ -81,8 +82,8 @@ else
      # check properites file exists
     check_file_config
     download_sdk
+    # run command
+    # set -e
+    "${WRAPPER_SDK_DIRECTORY}/${VERSION}/bin/flutter" "$@"
 fi
 
-# run command
-set -e
-"${WRAPPER_SDK_DIRECTORY}/${VERSION}/bin/flutter" "$@"
