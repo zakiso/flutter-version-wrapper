@@ -2,7 +2,7 @@
 
 flutterw：解决多人同时开发flutter项目的时候，版本不一致的小工具。灵感来源于gradlew。
 
-**only test on mac**
+**test on mac only**
 
 ### 使用说明
 1. 在你的项目根目录中执行命令下载脚本   
