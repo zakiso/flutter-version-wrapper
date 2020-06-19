@@ -42,6 +42,11 @@ init(){
     echo "REPO_URL=${CURRENT_URL}" >> ${WRAPPER_PROPERTIES_FILE}
 }
 
+# list() list all downloaded flutter version in ~/.flutter
+list(){
+    ls -1 ~/.flutter_wrapper
+}
+
 download_sdk(){
     required_flutter="${WRAPPER_SDK_DIRECTORY}/${VERSION}/bin/flutter"
     if [ ! -e ${required_flutter} ]
@@ -82,6 +87,9 @@ check_file_config(){
 if [ "$1" == "init" ]; then
     init
     printf "Init successful"
+elif [ "$1" == "list" ]; then
+    printf "Flutter in [${HOME}/.flutter] directory \n"
+    list
 else
      # check properites file exists
     check_file_config
