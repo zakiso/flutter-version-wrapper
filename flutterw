@@ -51,17 +51,12 @@ download_sdk(){
     required_flutter="${WRAPPER_SDK_DIRECTORY}/${VERSION}/bin/flutter"
     if [ ! -e ${required_flutter} ]
     then
-        if [[ ${VERSION} =~ ^[0-9|\.]+$ ]]
-        then
-            echo "v${VERSION}"
-            {
-                git clone -b "v${VERSION}" https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" --depth 1
-            } || {
-                git clone -b "${VERSION}" https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" --depth 1
-            }
-        else
-            git clone -b master https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" --depth 1
-        fi
+        echo "v${VERSION}"
+        {
+            git clone -b "v${VERSION}" https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" --depth 1
+        } || {
+            git clone -b "${VERSION}" https://github.com/flutter/flutter.git "${WRAPPER_SDK_DIRECTORY}/${VERSION}/" --depth 1
+        }
     fi
 }
 
