@@ -1,8 +1,33 @@
 ### Flutter version wrapper
 
+flutterw: Solve gadgets with inconsistent versions when multiple people develop flutter projects at the same time. Inspired by gradlew.
+
+**work on macOS & Linux**
+
+### Instructions for use
+1. Execute the command to download the script in your project root directory
+`curl -O https://raw.githubusercontent.com/zakiso/flutterw/master/flutterw && chmod 755 flutterw`
+
+2. Download the script and use it in the root directory
+`./flutterw init`
+This command will collect the flutter version in your current system and write the relevant information into the `flutter_wrapper.properties` file. All members of the team will use this version number as the standard version of the project
+
+3. Add the flutterw file and flutter_wrapper.properties file to git and submit to the warehouse
+
+4. After other members pull the code and use the `flutter` command in the project, use `./flutterw` instead
+
+
+### What did flutterw do?
+1. When using flutterw, it will get the version number in the flutter_wrapper.properties file in the current directory
+2. Go to the user's `${HOME}/flutter_wrapper/{version number}/` directory to find if there is this version of the SDK
+3. If there is no version of the SDK, it will be downloaded, and then use the SDK in this directory to execute the command
+
+
+### Flutter version wrapper
+
 flutterw：解决多人同时开发flutter项目的时候，版本不一致的小工具。灵感来源于gradlew。
 
-**test on mac only**
+**work on macOS & Linux**
 
 ### 使用说明
 1. 在你的项目根目录中执行命令下载脚本   
